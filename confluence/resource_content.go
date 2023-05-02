@@ -2,6 +2,7 @@ package confluence
 
 import (
 	"strings"
+	"regexp"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
@@ -156,7 +157,16 @@ func updateResourceDataFromContent(d *schema.ResourceData, content *Content, cli
 // are some whitespace differences between the old and new. This supresses the
 // false differences by comparing the trimmed strings
 func resourceContentDiffBody(k, old, new string, d *schema.ResourceData) bool {
-	return strings.TrimSpace(old) == strings.TrimSpace(new)
+	old = strings.TrimSpace(old)
+	new = strings.TrimSpace(new)
+
+
+	// Ignore macro-id which changes on page update
+	reg := regexp.MustCompile(` *ac:macro-id="[\w\d\-]*" *`)
+	old = reg.ReplaceAllString(old, "${1}")
+	new = reg.ReplaceAllString(new, "${1}")
+	return old == new
+
 }
 
 // If the parent was not set, running diff will show the actual value for old and
