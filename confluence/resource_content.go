@@ -1,8 +1,8 @@
 package confluence
 
 import (
-	"strings"
 	"regexp"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
@@ -159,7 +159,6 @@ func updateResourceDataFromContent(d *schema.ResourceData, content *Content, cli
 func resourceContentDiffBody(k, old, new string, d *schema.ResourceData) bool {
 	old = strings.TrimSpace(old)
 	new = strings.TrimSpace(new)
-
 
 	// Ignore macro-id which changes on page update
 	reg := regexp.MustCompile(` *ac:macro-id="[\w\d\-]*" *`)
