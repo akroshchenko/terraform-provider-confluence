@@ -2,6 +2,7 @@ package confluence
 
 import (
 	"bytes"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -17,18 +18,20 @@ type Client struct {
 	client    *http.Client
 	baseURL   *url.URL
 	basePath  string
+	headers   http.Header
 	publicURL *url.URL
 }
 
 // NewClientInput provides information to connect to the Confluence API
 type NewClientInput struct {
-	site             string
-	siteScheme       string
-	publicSite       string
-	publicSiteScheme string
-	context          string
-	user             string
-	token            string
+	context                string
+	publicSite             string
+	publicSiteScheme       string
+	serviceDeploymentModel string
+	site                   string
+	siteScheme             string
+	token                  string
+	user                   string
 }
 
 // ErrorResponse describes why a request failed
@@ -63,13 +66,25 @@ func NewClient(input *NewClientInput) *Client {
 		Scheme: input.siteScheme,
 		Host:   input.site,
 	}
-	baseURL.User = url.UserPassword(input.user, input.token)
+	// TODO: delete it
+	// baseURL.User = url.UserPassword(input.user, input.token)
+
+	headers := http.Header{}
+
+	headers.Set("Authorization", "Bearer "+input.token)
+
+	if input.serviceDeploymentModel == "cloud" {
+		auth := base64.StdEncoding.EncodeToString([]byte(input.user + ":" + input.token))
+		headers["Authorization"] = []string{"Basic " + auth}
+	}
+
 	return &Client{
 		client: &http.Client{
 			Timeout: time.Second * 10,
 		},
 		baseURL:   &baseURL,
 		basePath:  basePath,
+		headers:   headers,
 		publicURL: &publicURL,
 	}
 }
@@ -187,14 +202,23 @@ func (c *Client) doRaw(method, path, contentType string, body *bytes.Buffer) (*b
 	if err != nil {
 		return nil, err
 	}
+
+	for header, values := range c.headers {
+		for _, value := range values {
+			req.Header.Add(header, value)
+		}
+	}
+
 	if contentType != "" {
 		req.Header.Set("Content-Type", contentType)
 	}
 	req.Header.Add("X-Atlassian-Token", "nocheck")
+
 	resp, err := c.client.Do(req)
 	if err != nil {
 		return nil, err
 	}
+
 	defer resp.Body.Close()
 	expectedStatusCode := map[string]int{
 		"POST":   200,
@@ -220,6 +244,7 @@ func (c *Client) doRaw(method, path, contentType string, body *bytes.Buffer) (*b
 	if err != nil {
 		return nil, err
 	}
+
 	return result, nil
 }
 

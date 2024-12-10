@@ -1,6 +1,7 @@
 site_name: "Terraform Provider: Confluence"
-site_url: https://chesshacker.github.io/terraform-provider-confluence/
-repo_url: https://github.com/chesshacker/terraform-provider-confluence
+# TODO: fix it
+site_url: https://akroshchenko.github.io/terraform-provider-confluence/
+repo_url: https://github.com/akroshchenko/terraform-provider-confluence
 nav:
 - Getting Started: index.md
 - Resources:
