@@ -16,8 +16,7 @@ func main() {
 	opts := &plugin.ServeOpts{
 		Debug:        debugMode,
 		ProviderFunc: confluence.Provider,
-		// TODO: delete it after testing
-		ProviderAddr: "test-tf-registry.com/akroshchenko/confluence",
+		ProviderAddr: "registry.terraform.io/akroshchenko/confluence",
 	}
 
 	plugin.Serve(opts)
