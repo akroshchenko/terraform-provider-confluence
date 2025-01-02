@@ -1,10 +1,4 @@
-// TODO: make it work
-![](https://github.com/akroshchenko/terraform-provider-confluence/workflows/Build%20and%20Test/badge.svg)
-
 # Terraform Provider for Confluence
-
-// TODO: fix it
-[User Documentation](https://akroshchenko.github.io/terraform-provider-confluence/)
 
 ## Requirements
 
