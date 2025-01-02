@@ -1,15 +1,14 @@
 terraform {
   required_providers {
     confluence = {
-      source = "test-tf-registry.com/akroshchenko/confluence"
+      source = "registry.terraform.io/akroshchenko/confluence"
     }
   }
 }
 
 provider "confluence" {
-  site  = "test.atlassian.net"
-  token = "<changeme>"
-  service_deployment_model = "datacenter"
+#   site  = "selfhosted.confluence.com" # expose it via env var
+#   token = "<changeme>"                # expose it via env var
 }
 
 resource confluence_content "default" {
