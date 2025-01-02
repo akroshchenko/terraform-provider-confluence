@@ -57,9 +57,9 @@ Static credentials must be passed to the provider block.
   Defaults to `https`. This can also be set via the `CONFLUENCE_PUBLIC_SITE_SCHEMA`
   environment variable.
 
-- `user` - (Required) For Confluence Cloud the user is your user's email
-  address. For Confluence Server this is the username of the user to login.
-  This can also be set via the `CONFLUENCE_USER` environment variable.
+- `user` - (Optional) For Confluence Cloud the user is your user's email
+  address. Confluence Server does not use name for login, you need to provider
+  only token. This can also be set via the `CONFLUENCE_USER` environment variable.
 
 - `token` - (Required) For Confluence Cloud the token is a secret every user
   can generate. It is similar to a password and should be treated as such. For
