@@ -38,21 +38,12 @@ func Provider() *schema.Provider {
 				Description: "Confluence path context (Will default to /wiki if using an atlassian.net hostname)",
 				DefaultFunc: schema.EnvDefaultFunc("CONFLUENCE_CONTEXT", ""),
 			},
-			// TODO: improve the validation:
-			// - set the default to cloud
-			// - make sure that 'cloud' and 'datacenter' values are allowed
-			"service_deployment_model": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: "Confluence service deployment model: cloud or datacenter",
-				DefaultFunc: schema.EnvDefaultFunc("CONFLUENCE_SERVICE_VERSION", nil),
-			},
 			"user": {
 				Type: schema.TypeString,
 				// We make the 'user' field optional as there is a difference between authentication for Cloud-based and Datacenter versions of Confluence:
 				// Datacenter version requires only Personal Accees Token (without username)
 				// https://confluence.atlassian.com/enterprise/using-personal-access-tokens-1026032365.html
-				// where as Cloud-based uses both username and API token
+				// whereas Cloud-based uses both username and API token
 				// https://developer.atlassian.com/cloud/confluence/basic-auth-for-rest-apis/
 				Optional:    true,
 				Description: "User's email address for Cloud Confluence or username for Confluence Server",
@@ -82,7 +73,6 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 		context:                d.Get("context").(string),
 		publicSite:             d.Get("public_site").(string),
 		publicSiteScheme:       d.Get("public_site_scheme").(string),
-		serviceDeploymentModel: d.Get("service_deployment_model").(string),
 		site:                   d.Get("site").(string),
 		siteScheme:             d.Get("site_scheme").(string),
 		token:                  d.Get("token").(string),

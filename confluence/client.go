@@ -24,14 +24,13 @@ type Client struct {
 
 // NewClientInput provides information to connect to the Confluence API
 type NewClientInput struct {
-	context                string
-	publicSite             string
-	publicSiteScheme       string
-	serviceDeploymentModel string
-	site                   string
-	siteScheme             string
-	token                  string
-	user                   string
+	context          string
+	publicSite       string
+	publicSiteScheme string
+	site             string
+	siteScheme       string
+	token            string
+	user             string
 }
 
 // ErrorResponse describes why a request failed
@@ -57,25 +56,20 @@ func NewClient(input *NewClientInput) *Client {
 	}
 
 	basePath := input.context
-
-	// Default to /wiki if using Confluence Cloud`
+	headers := http.Header{}
+	headers.Set("Authorization", "Bearer "+input.token)
 	if strings.HasSuffix(input.site, ".atlassian.net") {
+		// Default to /wiki if using Confluence Cloud
 		basePath = "/wiki"
+
+		// Use basic auth if Confluence Cloud
+		auth := base64.StdEncoding.EncodeToString([]byte(input.user + ":" + input.token))
+		headers["Authorization"] = []string{"Basic " + auth}
 	}
+
 	baseURL := url.URL{
 		Scheme: input.siteScheme,
 		Host:   input.site,
-	}
-	// TODO: delete it
-	// baseURL.User = url.UserPassword(input.user, input.token)
-
-	headers := http.Header{}
-
-	headers.Set("Authorization", "Bearer "+input.token)
-
-	if input.serviceDeploymentModel == "cloud" {
-		auth := base64.StdEncoding.EncodeToString([]byte(input.user + ":" + input.token))
-		headers["Authorization"] = []string{"Basic " + auth}
 	}
 
 	return &Client{
