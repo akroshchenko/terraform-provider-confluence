@@ -7,7 +7,7 @@ terraform {
 }
 
 provider "confluence" {
-  site  = "confluence.oak.in.ua"
+  site  = "test.atlassian.net"
   token = "<changeme>"
   service_deployment_model = "datacenter"
 }
