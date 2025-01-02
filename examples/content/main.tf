@@ -12,7 +12,7 @@ provider "confluence" {
   token = var.token
 }
 
-resource confluence_content "example" {
+resource "confluence_content" "example" {
   space = var.space
   title = "My Pets"
   body = templatefile("${path.module}/example.tmpl", {
