@@ -31,6 +31,8 @@ func TestProvider_impl(t *testing.T) {
 }
 
 func testAccPreCheck(t *testing.T) {
+	t.Helper()
+
 	if v := os.Getenv("CONFLUENCE_SITE"); v == "" {
 		t.Fatal("CONFLUENCE_SITE must be set for acceptance tests")
 	}

@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 
-	"github.com/chesshacker/terraform-provider-confluence/confluence"
+	"github.com/akroshchenko/terraform-provider-confluence/confluence"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/plugin"
 )
 
@@ -16,6 +16,7 @@ func main() {
 	opts := &plugin.ServeOpts{
 		Debug:        debugMode,
 		ProviderFunc: confluence.Provider,
+		ProviderAddr: "registry.terraform.io/akroshchenko/confluence",
 	}
 
 	plugin.Serve(opts)
